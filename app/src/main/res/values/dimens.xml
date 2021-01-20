@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="title_test_height">30sp</dimen>
+
+
+    <dimen name="zipcode_entry_icon_size">40dp</dimen>
+</resources>
