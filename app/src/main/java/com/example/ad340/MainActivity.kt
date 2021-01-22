@@ -25,6 +25,7 @@ class MainActivity : AppCompatActivity() {
 
     
         enterButton.setOnClickListener {
+
             Toast.makeText(this,"Button clicked ",Toast.LENGTH_SHORT).show()
             val zipcode : String= zipcodeEdittext.text.toString()
             if (zipcode.length!=6)
@@ -34,6 +35,7 @@ class MainActivity : AppCompatActivity() {
             }
             else {
                 forecastRepository.loadForecast(zipcode)
+
             }
 
 

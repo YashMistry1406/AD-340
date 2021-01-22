@@ -1,6 +1,8 @@
 package com.example.ad340
 
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.core.util.rangeTo
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -22,6 +24,7 @@ class ForecastRepository {
 
 
     }
+//    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private fun getTempDescription(temp:Float): String{
 //        return if (temp<75)"It's too cold " else "great
         return when (temp){
