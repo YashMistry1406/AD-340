@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
         val zipcodeEdittext : EditText =findViewById(R.id.zipcodeEdittext)
         val enterButton :Button =findViewById(R.id.enterButton)
 
-    
+
         enterButton.setOnClickListener {
 
             Toast.makeText(this,"Button clicked ",Toast.LENGTH_SHORT).show()
@@ -53,11 +53,11 @@ class MainActivity : AppCompatActivity() {
 
         }
         forecastList.adapter=dailyForecastAdapter
-
-        val weeklyForecastObserver=Observer<List<DailyForecast>>{forecastitems->
+        //week 3 displaying the list from the live data
+        val weeklyForecastObserver=Observer<List<DailyForecast>>{forecastItems->
             // update list adapter
             //Toast.makeText(this,"Loaded items",Toast.LENGTH_SHORT).show()
-            dailyForecastAdapter.submitList(forecastitems)
+            dailyForecastAdapter.submitList(forecastItems)
 
 
 
