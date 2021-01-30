@@ -9,6 +9,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import com.example.ad340.R
 import kotlinx.android.synthetic.main.activity_main.*
 import org.w3c.dom.Text
@@ -52,5 +53,19 @@ class ForecastDetailsActivity : AppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
     }
+    private fun showTempDisplaySettingsDialog(){
+        val dialogBuilder=AlertDialog.Builder(this)
+            .setTitle("Choose Display Units")
+            .setMessage("Choose wich temperture unit to use for temperature display ")
+            .setPositiveButton(" F\u2103"){_,_->
+                Toast.makeText(this,"show using F",Toast.LENGTH_SHORT).show()
 
-}
+            }
+            .setNeutralButton("C\u2103") {_,_->
+                Toast.makeText(this,"show in C",Toast.LENGTH_SHORT).show()
+
+            }
+            }
+    }
+
+
