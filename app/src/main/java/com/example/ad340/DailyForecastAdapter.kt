@@ -7,6 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.ad340.details.formatTempForDisplay
 
 class DailyForecastViewHolder(view: View): RecyclerView.ViewHolder(view) {
 
@@ -18,7 +19,7 @@ class DailyForecastViewHolder(view: View): RecyclerView.ViewHolder(view) {
 
 
     fun bind (dailyForecast: DailyForecast) {
-        tempText.text =String.format("%.2f",dailyForecast.temp)
+        tempText.text = formatTempForDisplay(dailyForecast.temp)
         descriptionText.text = dailyForecast.description
 
 
