@@ -11,17 +11,19 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ad340.details.ForecastDetailsActivity
+import com.example.ad340.details.TempDisplaySettingManager
 import kotlinx.android.synthetic.main.item_dailly_forecast.*
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
     private val forecastRepository = ForecastRepository()
+    private  lateinit var tempDisplaySettingManager: TempDisplaySettingManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+        tempDisplaySettingManager=TempDisplaySettingManager(this)
         val zipcodeEdittext: EditText = findViewById(R.id.zipcodeEdittext)
         val enterButton: Button = findViewById(R.id.enterButton)
 
@@ -43,7 +45,7 @@ class MainActivity : AppCompatActivity() {
 
         val forecastList: RecyclerView = findViewById(R.id.forecastList)
         forecastList.layoutManager = LinearLayoutManager(this)
-        val dailyForecastAdapter = DailyForecastAdapter() {forecast ->
+        val dailyForecastAdapter = DailyForecastAdapter(tempDisplaySettingManager) {forecast ->
 
             //Toast.makeText(this,"Clicked Item ",Toast.LENGTH_SHORT).show()
             //
