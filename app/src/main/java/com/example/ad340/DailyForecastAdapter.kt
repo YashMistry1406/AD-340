@@ -12,7 +12,8 @@ import com.example.ad340.formatTempForDisplay
 
 class DailyForecastViewHolder(view: View,
                               private val tempDisplaySettingManager:TempDisplaySettingManager
-): RecyclerView.ViewHolder(view)
+)
+    : RecyclerView.ViewHolder(view)
 {
 
 

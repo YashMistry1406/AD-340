@@ -14,7 +14,7 @@ class TempDisplaySettingManager(context: Context) {
 
 
     fun updateSetting(setting: TempDisplaySetting) {
-        preferences.edit().putString("key_temp_display", setting.name).commit()
+        preferences.edit().putString("key_temp_display", setting.name).apply()
     }
     fun getTempDisplaySetting():TempDisplaySetting{
         val settingValue=preferences.getString("key_temp_display",TempDisplaySetting.Fahrenheit.name)?:TempDisplaySetting.Fahrenheit.name
