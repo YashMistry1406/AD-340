@@ -10,8 +10,7 @@ import kotlin.random.Random
 
 class ForecastRepository {                              //repo=loading data from repo and providing it to the activity
 
-    private val _weeklyForecast =
-        MutableLiveData<List<DailyForecast>>()         //it will hold the value of all the data from week
+    private val _weeklyForecast = MutableLiveData<List<DailyForecast>>()         //it will hold the value of all the data from week
     val weeklyForecast: LiveData<List<DailyForecast>> = _weeklyForecast
 
 
@@ -33,6 +32,7 @@ class ForecastRepository {                              //repo=loading data from
 //            in Float.MIN_VALUE.rangeTo(0f)->"Too cold to live "
             in 32f.rangeTo(55f) -> "noice"
             in 55f.rangeTo(75f) -> "wanna kill me"
+            in 80f.rangeTo(95f)->"okay"
             else -> "it doesnt even matter"
         }
     }

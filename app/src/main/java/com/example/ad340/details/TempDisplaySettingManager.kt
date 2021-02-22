@@ -7,7 +7,6 @@ enum class TempDisplaySetting
 {
     Fahrenheit,Celsius
 
-
 }
 class TempDisplaySettingManager(context: Context) {
     private val preferences = context.getSharedPreferences("settings", Context.MODE_PRIVATE)

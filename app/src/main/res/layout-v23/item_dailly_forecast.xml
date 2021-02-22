@@ -7,7 +7,10 @@
     android:layout_height="56dp"
     android:clickable="true"
     android:foreground="?attr/selectableItemBackground"
+    
+     
     >
+
     <TextView
         android:id="@+id/tempText"
         android:layout_width="wrap_content"
@@ -28,10 +31,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:text="Partly Cloudly"
+        android:text="Partly Clodly"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintBottom_toBottomOf="@id/tempText"
         app:layout_constraintStart_toEndOf="@id/tempText"
         app:layout_constraintTop_toTopOf="@id/tempText"
-         />
+        tools:layout_editor_absoluteX="70dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
