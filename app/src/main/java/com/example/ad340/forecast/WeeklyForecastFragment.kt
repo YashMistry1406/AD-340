@@ -18,6 +18,11 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 
 class WeeklyForecastFragment : Fragment() {
+
+    private lateinit var locationRepository: LocationRepository
+
+
+
     private val forecastRepository =
         ForecastRepository()  //creating instance of the class ForecastRepository
 
@@ -31,8 +36,7 @@ class WeeklyForecastFragment : Fragment() {
 
 
         val zipcode =arguments?.getString(KEY_ZIPCODE) ?:""
-        tempDisplaySettingManager =
-            TempDisplaySettingManager(requireContext())
+        tempDisplaySettingManager = TempDisplaySettingManager(requireContext())
 
 
 
@@ -41,24 +45,19 @@ class WeeklyForecastFragment : Fragment() {
         // Inflate the layout for this fragment
         val view= inflater.inflate(R.layout.fragment_weekly_forecast, container, false)  //
 
-        val locationEntryButton:FloatingActionButton=view.findViewById(R.id.locationEntryButton)
-        locationEntryButton.setOnClickListener {
-            showLocationEntry()   // we ar creating a click listener for the icon at the bottom of the screen
 
-
-        }
 
 
         val forecastList: RecyclerView = view.findViewById(R.id.forecastList)
         forecastList.layoutManager = LinearLayoutManager(requireContext())
-        val dailyForecastAdapter = DailyForecastAdapter(tempDisplaySettingManager) { forecast ->
+        val dailyForecastAdapter = DailyForecastAdapter(tempDisplaySettingManager) { it ->
 
             //Toast.makeText(this,"Clicked Item ",Toast.LENGTH_SHORT).show()
             //
             //            val msg= getString(R.string.forecast_clicked_format,it.temp,it.description)
             //
             //            Toast.makeText(this,msg ,Toast.LENGTH_SHORT).show()
-            showforecastDetails(forecast)
+            showforecastDetails(it)
 
         }
         forecastList.adapter = dailyForecastAdapter
@@ -71,10 +70,28 @@ class WeeklyForecastFragment : Fragment() {
 
         }
 
-
         forecastRepository.weeklyForecast.observe(this, weeklyForecastObserver)
 
-        forecastRepository.loadForecast((zipcode))
+
+        val locationEntryButton:FloatingActionButton=view.findViewById(R.id.locationEntryButton)
+        locationEntryButton.setOnClickListener {
+            showLocationEntry()   // we ar creating a click listener for the icon at the bottom of the screen
+
+
+        }
+
+        locationRepository= LocationRepository((requireContext()))
+        val savedLocationObserver= Observer<Location> {savedLocation ->
+            /*
+            when can enforce that we handle all types wothin sealed class hierarchy
+             */
+            when(savedLocation)
+            {
+                is Location.Zipcode-> forecastRepository.loadWeeklyForecast(savedLocation.zipcode)
+
+            }
+        }
+        locationRepository.savedLocation.observe(viewLifecycleOwner,savedLocationObserver)
         return view
     }
 

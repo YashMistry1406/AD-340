@@ -1,25 +1,27 @@
 package com.example.ad340.forecast
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.ad340.*
-import com.example.ad340.details.ForecastDetailsFragment
+import com.example.ad340.api.CurrentWeather
 import com.example.ad340.details.TempDisplaySettingManager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 
 class CurrentForecastFragment : Fragment() {
-    private val forecastRepository =
-        ForecastRepository()  //creating instance of the class ForecastRepository
+
+
+    /*
+    creating a reference to location repo
+     */
+    private lateinit var locationRepository: LocationRepository
+    private val forecastRepository = ForecastRepository()  //creating instance of the class ForecastRepository
 
 //    private lateinit var appNavigator: AppNavigator
 //    override fun onAttach(context: Context) {
@@ -28,6 +30,9 @@ class CurrentForecastFragment : Fragment() {
 //    }
 
     private lateinit var tempDisplaySettingManager: TempDisplaySettingManager
+
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -36,43 +41,51 @@ class CurrentForecastFragment : Fragment() {
 
         val view= inflater.inflate(R.layout.fragment_current_forecast, container, false)
 
+        val locationName:TextView=view.findViewById(R.id.LocationName)
+
+        val tempText :TextView=view.findViewById(R.id.TempText)
+
+
         val zipcode =arguments?.getString(KEY_ZIPCODE) ?:""
 
         tempDisplaySettingManager = TempDisplaySettingManager(requireContext()) // Inflate the layout for this fragment
 
         val locationEntryButton:FloatingActionButton=view.findViewById(R.id.locationEntryButton)
+//
+//        val forecastList: RecyclerView = view.findViewById(R.id.forecastList)
+//
+//        val dailyForecastAdapter = DailyForecastAdapter(tempDisplaySettingManager) { forecast ->
+//
+//            //Toast.makeText(this,"Clicked Item ",Toast.LENGTH_SHORT).show()
+//            //
+//            //            val msg= getString(R.string.forecast_clicked_format,it.temp,it.description)
+//            //
+//            //            Toast.makeText(this,msg ,Toast.LENGTH_SHORT).show()
+//            showForecastDetails(forecast)
+//
+//        }
+//
+//
+//
+//        forecastList.adapter = dailyForecastAdapter
 
-        val forecastList: RecyclerView = view.findViewById(R.id.forecastList)
 
-        val dailyForecastAdapter = DailyForecastAdapter(tempDisplaySettingManager) { forecast ->
-
-            //Toast.makeText(this,"Clicked Item ",Toast.LENGTH_SHORT).show()
-            //
-            //            val msg= getString(R.string.forecast_clicked_format,it.temp,it.description)
-            //
-            //            Toast.makeText(this,msg ,Toast.LENGTH_SHORT).show()
-            showForecastDetails(forecast)
-
-        }
-        forecastList.adapter = dailyForecastAdapter
-
-
-
-
-
-        forecastList.layoutManager = LinearLayoutManager(requireContext())
+//        forecastList.layoutManager = LinearLayoutManager(requireContext())
 
 
         //week 3 displaying the list from the live data
-        val weeklyForecastObserver = Observer<List<DailyForecast>> { forecastItems ->
+//        val weeklyForecastObserver = Observer<List<DailyForecast>> { forecastItems ->
+//      dailyForecastAdapter.submitList(forecastItems)
+//        }
+//        forecastRepository.weeklyForecast.observe(this, weeklyForecastObserver)
 
-            dailyForecastAdapter.submitList(forecastItems)
-
-
+        val currentWeatherObserver= Observer<CurrentWeather> {weather->
+            //update our list adapter
+            locationName.text= weather.name
+            tempText.text= formatTempForDisplay(weather.forecast.temp,tempDisplaySettingManager.getTempDisplaySetting())
         }
 
-
-        forecastRepository.weeklyForecast.observe(this, weeklyForecastObserver)
+        forecastRepository.currentWeather.observe(viewLifecycleOwner,currentWeatherObserver)
 
 
         locationEntryButton.setOnClickListener {
@@ -81,8 +94,22 @@ class CurrentForecastFragment : Fragment() {
 
         }
 
+        /*
+        listen for changes on savedlocation value any time we get an update in the location we are going to refresh our ui
 
-        forecastRepository.loadForecast((zipcode))
+         */
+        locationRepository= LocationRepository(requireContext())
+        val savedLocationObserver= Observer<Location> {savedLocation ->
+            when (savedLocation)
+            {
+                is Location.Zipcode->forecastRepository.loadCurrentForecast(savedLocation.zipcode)
+            }
+        }
+        locationRepository.savedLocation.observe(viewLifecycleOwner,savedLocationObserver)
+
+
+
+//        forecastRepository.loadForecast((zipcode))// commented it out as we are not referehing the view as soon as it loaded
         return view
     }
 
@@ -92,6 +119,11 @@ class CurrentForecastFragment : Fragment() {
         findNavController().navigate(action)
 
     }
+
+
+
+
+
 
 
 
@@ -118,6 +150,10 @@ class CurrentForecastFragment : Fragment() {
         findNavController().navigate(action)
 
     }
+
+
+
+
     companion object{ //static method in java
 //        we can replicate the behaviour that of staticmetod in java
         const val KEY_ZIPCODE="key_zipcode" // we will pass a keyvalue pair

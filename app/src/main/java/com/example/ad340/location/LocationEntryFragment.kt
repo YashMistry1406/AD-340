@@ -10,19 +10,23 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
+import com.example.ad340.Location
+import com.example.ad340.LocationRepository
 //import com.example.ad340.AppNavigator
 import com.example.ad340.R
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 class LocationEntryFragment : Fragment() {
+
+    private lateinit var locationRepository: LocationRepository
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+
+        locationRepository= LocationRepository(requireContext())
+
         // Inflate the layout for this fragment
         val view= inflater.inflate(R.layout.fragment_location_entry, container, false)
 
@@ -42,10 +46,9 @@ class LocationEntryFragment : Fragment() {
                                                                          */
 
 //
-//    /* below we have implemented the setOnclicklistener that is invoked or called when on the main screen the
-//    an temperature is clicked
-//
-//        */
+        /* below we have implemented the setOnclicklistener that is invoked or called when on the main screen the
+        an temperature is clicked
+        */
         enterButton.setOnClickListener {
 
 //            Toast.makeText(this, "Button clicked ", Toast.LENGTH_SHORT).show()
@@ -57,7 +60,9 @@ class LocationEntryFragment : Fragment() {
 //                forecastRepository.loadForecast(zipcode)
 //                Toast.makeText(requireContext(),"pincode entered",Toast.LENGTH_SHORT).show()
 //                appNavigator.navigateToCurrentForecast(zipcode)
-                findNavController().navigateUp()
+
+                   locationRepository.saveLocation(Location.Zipcode(zipcode))
+                    findNavController().navigateUp()
             }
 
 
